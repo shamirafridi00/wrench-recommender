@@ -1,0 +1,475 @@
+/* --- Base & Variables --- */
+:root {
+    --primary-color: #3a86ff; /* Slightly softer, vibrant Blue */
+    --secondary-color: #4cc9f0; /* Lighter Aqua */
+    --accent-color: #ffbe0b; /* Vibrant Yellow/Orange */
+    --gradient-start: #3a86ff;
+    --gradient-end: #4cc9f0;
+    --bg-color-light: #f8f9fa; /* Slightly off-white */
+    --bg-color-white: #ffffff;
+    --selected-bg-color: #e7f1ff; /* Light blue for selected option */
+    --text-color-dark: #212529; /* Darker grey */
+    --text-color-light: #6c757d; /* Medium grey */
+    --border-color: #dee2e6; /* Lighter border */
+    --shadow-color-light: rgba(58, 134, 255, 0.1); /* Lighter shadow based on primary */
+    --shadow-color-darker: rgba(0, 0, 0, 0.1);
+    --success-color: #28a745;
+    --error-color: #dc3545; /* Standard Bootstrap error red */
+    --error-color-soft: #ff7a7a; /* Softer red for reset button */
+    --font-primary: 'Poppins', sans-serif;
+}
+
+/* Subtle Background Pattern */
+body {
+    font-family: var(--font-primary);
+    line-height: 1.7; /* Slightly increased line-height */
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color-light);
+    /* Subtle pattern from https://www.heropatterns.com/ */
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23dde3ea' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    color: var(--text-color-dark);
+    scroll-behavior: smooth;
+}
+
+#app {
+    max-width: 880px; /* Wider */
+    margin: 40px auto; /* More top/bottom margin */
+    background: var(--bg-color-white);
+    padding: 30px 40px; /* Generous padding */
+    border-radius: 16px; /* More pronounced radius */
+    box-shadow: 0 10px 30px var(--shadow-color-darker);
+    overflow: hidden; /* Keep transitions contained */
+    border: 1px solid var(--border-color);
+}
+
+/* --- Header & Footer --- */
+.app-header {
+    text-align: center;
+    margin-bottom: 35px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 25px;
+}
+.app-header h1 {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 2em; /* Larger title */
+    margin-bottom: 8px;
+}
+.app-header h1 .icon {
+    font-size: 0.8em;
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0 5px;
+}
+.app-header p {
+    color: var(--text-color-light);
+    font-size: 1.15em;
+    margin-bottom: 0;
+}
+.app-footer {
+    text-align: center;
+    margin-top: 45px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9em;
+    color: var(--text-color-light);
+}
+
+
+/* --- Questionnaire & Transitions --- */
+.questionnaire-container {
+    position: relative;
+    min-height: 420px; /* Adjust if needed */
+}
+.question-wrapper {
+     width: 100%;
+}
+
+/* Card Style */
+.card-style {
+    background-color: var(--bg-color-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px; /* Consistent radius */
+    padding: 30px; /* Increased padding */
+    box-shadow: 0 5px 15px var(--shadow-color-light);
+    margin-bottom: 30px;
+}
+
+.question-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    font-size: 1.3em; /* Larger question text */
+}
+
+/* --- Progress Bar --- */
+.progress-bar-container {
+    margin-bottom: 30px;
+}
+.progress-bar-track {
+    height: 12px; /* Thicker */
+    background-color: #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.progress-bar-fill {
+    height: 100%;
+    background-image: linear-gradient(to right, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    border-radius: 6px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition */
+}
+.progress-text {
+    text-align: center;
+    font-size: 0.95em;
+    color: var(--text-color-light);
+    font-weight: 500;
+}
+
+/* --- Options Styling (Radio Buttons) --- */
+.options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px; /* Increased gap */
+}
+
+.option {
+    position: relative;
+    display: flex;
+    background-color: var(--bg-color-white);
+    padding: 18px; /* More padding */
+    border-radius: 8px;
+    border: 2px solid var(--border-color); /* Visible border */
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+
+.option:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-3px); /* Slightly more lift */
+    box-shadow: 0 4px 12px var(--shadow-color-light);
+}
+
+/* Focus state for accessibility */
+.option:focus-within,
+.option input[type="radio"]:focus-visible + label {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--shadow-color-light);
+}
+
+
+.option input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.option label {
+    cursor: pointer;
+    flex-grow: 1;
+    color: var(--text-color-dark);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Push checkmark to the end */
+    gap: 10px;
+    position: relative; /* For checkmark positioning */
+    padding-left: 30px; /* Space for custom radio */
+}
+.option label::before { /* Custom radio indicator */
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+/* Checkmark Styling */
+.option .checkmark {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    color: var(--success-color);
+    flex-shrink: 0;
+}
+.option .checkmark::before { /* Simple checkmark using border */
+    content: '';
+    display: block;
+    width: 6px;
+    height: 12px;
+    border: solid currentColor;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg) translate(-2px, -1px);
+}
+
+.option input[type="radio"]:checked + label {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.option input[type="radio"]:checked + label::before {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    background-image: radial-gradient(circle, white 35%, var(--primary-color) 45%);
+}
+.option input[type="radio"]:checked + label .checkmark {
+    opacity: 1;
+}
+/* Apply border change directly to option on check */
+.option:has(input[type="radio"]:checked) {
+    border-color: var(--primary-color);
+    background-color: var(--selected-bg-color);
+}
+
+
+/* --- Buttons --- */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.btn {
+    padding: 14px 30px; /* Larger buttons */
+    border: none;
+    border-radius: 8px; /* Consistent radius */
+    cursor: pointer;
+    font-size: 1.05em; /* Slightly larger font */
+    font-weight: 600;
+    font-family: var(--font-primary);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px; /* More space for icon */
+    text-decoration: none;
+    justify-content: center;
+    line-height: 1; /* Prevent extra height */
+}
+
+/* Focus visible state for buttons */
+.btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--shadow-color-light);
+}
+
+.btn-primary {
+    background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    color: white;
+    box-shadow: 0 5px 18px rgba(58, 134, 255, 0.3); /* Primary color shadow */
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(58, 134, 255, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-secondary {
+    background-color: #e9ecef; /* Lighter Grey */
+    color: var(--text-color-dark);
+    border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+    background-color: #ced4da;
+    border-color: #adb5bd;
+    transform: translateY(-2px);
+}
+
+.btn-reset {
+    background-color: var(--error-color-soft); /* Use the softer red variable */
+    color: white;
+    display: block;
+    /* Auto margins for centering */
+    margin-left: auto;
+    margin-right: auto;
+    /* No top margin needed here due to grid spacing */
+    margin-top: 0;
+    /* Keep existing shadow */
+    box-shadow: 0 4px 15px rgba(255, 122, 122, 0.3);
+}
+
+.btn-reset:hover {
+    background-color: var(--error-color); /* Use standard darker red on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+.btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.btn svg {
+    vertical-align: middle;
+}
+
+
+/* --- Animation Styles (Refined Easing) --- */
+.slide-next-enter-active, .slide-next-leave-active,
+.slide-prev-enter-active, .slide-prev-leave-active {
+    transition: all 0.45s cubic-bezier(0.645, 0.045, 0.355, 1); /* Smoother Ease-in-out */
+}
+.slide-next-enter-from { opacity: 0; transform: translateX(40px); }
+.slide-next-leave-to { opacity: 0; transform: translateX(-40px); }
+.slide-prev-enter-from { opacity: 0; transform: translateX(-40px); }
+.slide-prev-leave-to { opacity: 0; transform: translateX(40px); }
+
+
+/* --- Results Styling --- */
+.results-section {
+    padding-top: 15px;
+}
+.results-title {
+    text-align: center;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.8em; /* Larger results title */
+}
+.results-subtitle {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--text-color-light);
+    font-size: 1.1em;
+}
+.fallback-title {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    color: var(--text-color-dark);
+    font-weight: 600;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Wider cards */
+    gap: 30px; /* Wider gap */
+    /* Increased bottom margin for space above reset button */
+    margin-bottom: 50px;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative; /* For debug score */
+    /* Add text-align center to help center the inline-flex button */
+    text-align: center;
+}
+.product-card:hover {
+    transform: translateY(-6px); /* More lift */
+    box-shadow: 0 10px 25px var(--shadow-color-darker);
+}
+
+/* Optional Debug Score Display */
+.debug-score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    z-index: 1;
+}
+
+.product-image-container {
+    height: 200px; /* Taller image area */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    background-color: #fdfdfd; /* Almost white */
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #f0f0f0;
+}
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-name {
+    font-size: 1.15em; /* Slightly larger */
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color-dark);
+    min-height: 48px; /* Adjust if needed */
+}
+
+.product-keywords {
+    margin-bottom: 10px;
+}
+.keyword-tag {
+    display: inline-block;
+    background-color: #e9ecef;
+    color: var(--text-color-light);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.product-description {
+    font-size: 0.95em; /* Slightly larger */
+    color: var(--text-color-light);
+    margin-bottom: 18px;
+    flex-grow: 1;
+    line-height: 1.6;
+    /* Keep text aligned left within the card */
+    text-align: left;
+}
+
+.product-price {
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 18px;
+    font-size: 1.3em; /* Larger price */
+}
+
+/* Specific fix for CTA button */
+.cta-button {
+    margin-top: auto; /* Pushes button down */
+    max-width: 80%; /* Adjust as needed */
+    margin-left: auto; /* Center the button block */
+    margin-right: auto; /* Center the button block */
+    /* Ensure it inherits .btn styles correctly */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    #app {
+        padding: 25px 20px;
+    }
+    .results-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+    .app-header h1 { font-size: 1.8em; }
+    .question-label { font-size: 1.2em; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    #app { margin: 20px auto; border-radius: 12px; }
+    .options { grid-template-columns: 1fr; } /* Stack options */
+    .results-grid { grid-template-columns: 1fr; } /* Stack products */
+    .app-header h1 { font-size: 1.6em; }
+    .question-label { font-size: 1.1em; }
+     .btn { padding: 12px 25px; font-size: 1em; }
+     .product-card:hover { transform: none; box-shadow: 0 5px 15px var(--shadow-color-light); } /* Disable lift on mobile hover */
+}
+
